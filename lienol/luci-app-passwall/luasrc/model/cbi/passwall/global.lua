@@ -150,7 +150,7 @@ o:value("gfwlist", translate("GFW List"))
 -- o:value("chnroute", translate("China WhiteList"))
 o.default = "default"
 o.rmempty = false
-
+m:section(SimpleSection).template  = "passwall/server_list/checkport"
 --[[
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
