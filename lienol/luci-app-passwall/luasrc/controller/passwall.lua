@@ -11,8 +11,7 @@ function index()
     entry({"admin", "vpn"}, firstchild(), "VPN", 45).dependent = false
     entry({"admin", "vpn", "passwall", "show"}, call("show_menu")).leaf = true
     entry({"admin", "vpn", "passwall", "hide"}, call("hide_menu")).leaf = true
-    if nixio.fs.access("/etc/config/passwall") and
-        nixio.fs.access("/etc/config/passwall_show") then
+    if nixio.fs.access("/etc/config/passwall") and                                                                      nixio.fs.access("/etc/config/passwall_show") then
         entry({"admin", "vpn", "passwall"},
               alias("admin", "vpn", "passwall", "settings"), _("Pass Wall"), 1).dependent =
             true
@@ -21,22 +20,28 @@ function index()
           _("Basic Settings"), 1).dependent = true
     entry({"admin", "vpn", "passwall", "server_list"},
           cbi("passwall/server_list"), _("Server List"), 2).dependent = true
+
+     entry({"admin", "vpn", "passwall", "subscription"},cbi("passwall/subscription"), _("Subscription Managenent"),3).leaf = true
+
     entry({"admin", "vpn", "passwall", "auto_switch"},
-          cbi("passwall/auto_switch"), _("Auto Switch"), 3).leaf = true
+          cbi("passwall/auto_switch"), _("Auto Switch"), 4).leaf = true
     entry({"admin", "vpn", "passwall", "other"}, cbi("passwall/other"),
           _("Other Settings"), 94).leaf = true
     if nixio.fs.access("/usr/sbin/haproxy") then
         entry({"admin", "vpn", "passwall", "balancing"},
               cbi("passwall/balancing"), _("Load Balancing"), 95).leaf = true
     end
+     
     entry({"admin", "vpn", "passwall", "rule"}, cbi("passwall/rule"),
           _("Rule Update"), 96).leaf = true
     entry({"admin", "vpn", "passwall", "acl"}, cbi("passwall/acl"),
           _("Access control"), 97).leaf = true
     entry({"admin", "vpn", "passwall", "rulelist"}, cbi("passwall/rulelist"),
           _("Set Blacklist And Whitelist"), 98).leaf = true
+
+   entry({"admin", "vpn", "passwall", "status"},form("passwall/status"),_("Status"), 99).leaf = true
     entry({"admin", "vpn", "passwall", "log"}, cbi("passwall/log"),
-          _("Watch Logs"), 99).leaf = true
+          _("Watch Logs"), 100).leaf = true
     entry({"admin", "vpn", "passwall", "serverconfig"},
           cbi("passwall/serverconfig")).leaf = true
 
