@@ -5,18 +5,12 @@ local uci = require "luci.model.uci".cursor()
 local appname = "passwall"
 
 m = Map(appname)
-
+m:section(SimpleSection).template  = "passwall/global/status"
 -- [[ Other Settings ]]--
 s = m:section(TypedSection, "global_other")
 s.anonymous = true
 
----- Auto Ping
-o = s:option(Flag, "auto_ping", translate("Auto Ping"),
-             translate("This will automatically ping the server for latency"))
-o.default = 0
 
--- [[ Add the server via the link ]]--
-s:append(Template("passwall/server_list/link_add_server"))
 
 -- [[ Servers List ]]--
 s = m:section(TypedSection, "servers")
@@ -53,8 +47,7 @@ o.width = "15%"
 o = s:option(DummyValue, "server_port", translate("Server Port"))
 o.width = "10%"
 
----- Encrypt Method
---[[o = s:option(DummyValue, "encrypt_method", translate("Encrypt Method"))
+o = s:option(DummyValue, "encrypt_method", translate("Encrypt Method"))
 o.width="15%"
 o.cfgvalue=function(t, n)
 local str="无"
@@ -67,10 +60,15 @@ elseif type == "V2ray" then
 	return m.uci:get(appname, n, "v2ray_security")
 end
 return str
-end--]]
+end
+
+o = s:option(Flag,"use_kcp",translate("Kcptun Switch"))
+o.width="10%"
+
+
 
 ---- Ping
-o = s:option(DummyValue, "server", translate("Ping"))
+o = s:option(DummyValue, "server", translate("Ping Latency"))
 if uci:get(appname, "@global_other[0]", "auto_ping") == "0" then
     o.template = "passwall/server_list/ping"
 else
