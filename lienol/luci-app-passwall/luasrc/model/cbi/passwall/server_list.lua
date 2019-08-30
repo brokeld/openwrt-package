@@ -61,6 +61,11 @@ elseif type == "V2ray" then
 end
 return str
 end
+o = s:option(DummyValue, "protocol", translate("Protocol"))
+o.width = "10%"
+o = s:option(DummyValue, "obfs", translate("Obfs"))
+
+o.width = "10%"
 
 o = s:option(Flag,"use_kcp",translate("Kcptun Switch"))
 o.width="10%"
