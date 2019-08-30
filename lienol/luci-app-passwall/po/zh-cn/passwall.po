@@ -139,6 +139,11 @@ msgstr "默认使用高级设置里的国内DNS服务器1作为国内DNS"
 msgid "custom"
 msgstr "自定义"
 
+
+msgid "Subscription Managenent"
+msgstr "订阅管理"
+
+
 msgid "DNS Server"
 msgstr "DNS服务器"
 
