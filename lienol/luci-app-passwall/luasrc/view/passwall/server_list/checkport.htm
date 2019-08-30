@@ -1,10 +1,6 @@
 ﻿
 
-<!DOCTYPE html>
-
-
-<html>
-
+</DIV>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-dns-prefetch-control" content="on">
@@ -25,7 +21,6 @@
     <link rel="preconnect" href="https://dt.skk.moe">
     <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/npm/skx@0.0.1">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
-    <title>IP 地址查询</title>
     <style>
         .ip-title {
             font-weight: bold;
@@ -124,12 +119,13 @@
     </style>
 </head>
 <fieldset class="cbi-section">
+
 	<table>
      <tr><td width="100%">
-<body onLoad="myip_Load()">
+<body>
     <div style="display: flex;">
         <div style="width: 51%">
-            <h3>IP 地址</h3>
+            <h1><font color="#2E8B57"><B>IP 地址查询</B></font></h1>
             <p>
                 <span class="ip-title">IP&nbsp;登录设备:</span><span class="ip-result" id="ip-webrtc"></span> <span class="ip-geo" id="ip-webrtc-cz88"></span>
             </p>
@@ -140,14 +136,14 @@
                 <span class="ip-title">淘宝&nbsp;&nbsp;&nbsp;&nbsp;国内:</span><span class="ip-result" id="ip-taobao"></span> <span class="ip-geo" id="ip-taobao-ipip"></span>
             </p>
             <p>
-                <span class="ip-title">IP.SB&nbsp;&nbsp;海外:</span><span class="ip-result" id="ip-ipsb"></span> <span class="ip-geo" id="ip-ipsb-geo"></span>
+                <span class="ip-title">IPAPI&nbsp;&nbsp;海外:</span><span class="ip-result" id="ip-ipapi"></span> <span class="ip-geo" id="ip-ipapi-geo"></span>
             </p>
             <p>
-                <span class="ip-title">IPAPI&nbsp;&nbsp;海外:</span><span class="ip-result" id="ip-ipapi"></span> <span class="ip-geo" id="ip-ipapi-geo"></span>
+                <span class="ip-title">IPIFY&nbsp;&nbsp;海外:</span><span class="ip-result" id="ip-ipify"></span> <span class="ip-geo" id="ip-ipify-ipip"></span>
             </p>
         </div>
         <div style="width: 49%">
-            <h3>网站访问检查</h3>
+            <h1><font color="#2E8B57"><B>网站访问检查</B></font></h1>
             <p>
                 <span class="ip-state_title">百度搜索:</span><span id="http-baidu"></span>
             </p>
@@ -166,7 +162,7 @@
         </div>
     </div>
     <div>
-        <p style="float: right; margin-top: 3px; font-size:15px; padding-right: 10px">Powered by <a onclick="return ip_skk()" href="javascript:void(0);">ip.skk.moe</a></p>
+        <p style="float: right; margin-top: 4px; font-size:15px; padding-right: 10px">由 <a onclick="return ip_skk()" href="javascript:void(0);">ip.skk.moe 提供支持</a></p>
     </div>
     </td></tr>
 	</table>
@@ -180,9 +176,9 @@
         const $$ = document;
         $$.getElementById('ip-webrtc').innerHTML = '查询中...';
         $$.getElementById('ip-taobao').innerHTML = '查询中...';
-        $$.getElementById('ip-ipapi').innerHTML = '查询中...';
+        $$.getElementById('ip-ipify').innerHTML = '查询中...';
         $$.getElementById('ip-ipipnet').innerHTML = '查询中...';
-        $$.getElementById('ip-ipsb').innerHTML = '查询中...';
+        $$.getElementById('ip-ipapi').innerHTML = '查询中...';
         let random = parseInt(Math.random() * 100000000);
         let IP = {
             get: (url, type) =>
@@ -248,16 +244,22 @@
                 $$.getElementById('ip-taobao').innerHTML = data.ip;
                 IP.parseIPIpip(data.ip, 'ip-taobao-ipip');
             },
-            getIpsbIP: (data) => {
-                $$.getElementById('ip-ipsb').innerHTML = data.address;
-                $$.getElementById('ip-ipsb-geo').innerHTML = `${data.country} ${data.province} ${data.city} ${data.isp.name}`
-            },
             getIPApiIP: () => {
                 IP.get(`https://ipapi.co/json?z=${random}`, 'json')
                     .then(resp => {
                         $$.getElementById('ip-ipapi').innerHTML = resp.data.ip;
                         IP.parseIPIpip(resp.data.ip, 'ip-ipapi-geo');
                     })
+            },
+            getIpifyIP: () => {
+                IP.get(`https://api.ipify.org/?format=json&z=${random}`, 'json')
+                .then(resp => {
+                $$.getElementById('ip-ipify').innerHTML = resp.data.ip;
+                return resp.data.ip;
+                })
+                .then(ip => {
+                IP.parseIPIpip(ip, 'ip-ipify-ipip');
+                })
             }
         };
 
@@ -296,43 +298,35 @@
             }
         };
         
+	      HTTP.runcheck();
+	      IP.getIpipnetIP();
+	      IP.getIpifyIP();
+	      IP.getIPApiIP();
+	      IP.getWebrtcIP();
+
+	      window.onload=myip_Load();
+	      
 	      function myip_Load()
 	      {
-
 	         var tbip = document.getElementsByTagName('HEAD').item(0);
 	         var tbipScript= document.createElement("script");
-	         tbipScript.defer = "defer";
+	         tbipScript.async = "async";
 	         tbipScript.src='https://www.taobao.com/help/getip.php';
 	         tbip.appendChild( tbipScript);
-
-	         var sbip = document.getElementsByTagName('HEAD').item(0);
-	         var sbipScript= document.createElement("script");
-	         sbipScript.defer = "defer";
-	         sbipScript.src='https://ipv4.ip.sb/addrinfo?callback=IP.getIpsbIP';
-	         sbip.appendChild( sbipScript);
 
 	         const $$ = document;
 	         random = parseInt(Math.random() * 100000000);
 	         window.ipCallback = (data) => IP.getTaobaoIP(data);
+		       HTTP.runcheck();
 		       IP.getIpipnetIP();
+		       IP.getIpifyIP();
 		       IP.getIPApiIP();
 		       IP.getWebrtcIP();
-		       HTTP.runcheck();
        	   setTimeout("myip_Load()",1000*8);
 		   }
 
-
-
     </script>
-    <script>
-        window.ga_tid = "UA-122669675-5";
-        window.ga_url = "https://ga.giuem.com";
-    </script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/@giuem/ga-proxy" async></script>
-
+    <script async="async" src="https://www.taobao.com/help/getip.php"></script>
 </body>
-
-</html>
-
 
 
