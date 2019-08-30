@@ -143,6 +143,8 @@ msgstr "自定义"
 msgid "Subscription Managenent"
 msgstr "订阅管理"
 
+msgid "Status"
+msgstr "状态"
 
 msgid "DNS Server"
 msgstr "DNS服务器"
